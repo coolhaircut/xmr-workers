@@ -1,3 +1,4 @@
+import { PipesModule } from './../pipes/pipes.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -25,7 +26,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     RouterModule,
     OrderModule,
     ReactiveFormsModule,
-    ClipboardModule
+    ClipboardModule,
+    PipesModule
   ],
   exports: [
     MomentModule,

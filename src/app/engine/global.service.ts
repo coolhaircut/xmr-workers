@@ -106,6 +106,16 @@ export class GlobalService {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
 
+  formatHashrate(value: number, decimals = 2) {
+    if (value <= 0){
+      return '0 H/s';
+    }
+    const oneK = 1024;
+    const sizes = ['H', 'KH', 'MH', 'GH', 'TH', 'PH', 'EH', 'ZH', 'YH'];
+    const idx = Math.floor(Math.log(value) / Math.log(oneK));
+    return parseFloat((value / Math.pow(oneK, idx)).toFixed(decimals < 0 ? 0 : decimals)) + ' ' + sizes[idx];
+  }
+
   download(content: string, name: string, type: string = 'application/octet-stream') {
     // Avaliar utilização do novo método base64ToBlob
     const newBlob = new Blob([content], { type });
@@ -133,5 +143,16 @@ export class GlobalService {
       window.URL.revokeObjectURL(data);
       link.remove();
     }, 100);
+  }
+
+  priority(p: number) {
+    switch (p) {
+      case -1: return 'default';
+      case 1: return 'below normal';
+      case 2: return 'normal';
+      case 3: return 'above normal';
+      case 4: return 'high';
+      case 5: return 'realtime';
+    }
   }
 }

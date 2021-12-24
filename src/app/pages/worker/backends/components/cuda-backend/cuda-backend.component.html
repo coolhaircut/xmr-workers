@@ -1,0 +1,124 @@
+<div class="card mb-3" *ngIf="!!worker">
+  <h5 class="card-header card-header">
+    <span>CUDA</span>
+    <span class="badge" [class.badge-success]="worker.enabled" [class.badge-danger]="!worker.enabled">
+      {{worker.enabled ? 'enabled' : 'disabled'}}
+    </span>
+    <div class="btn-group float-right">
+      <button class="btn btn-outline-primary" title="Refresh" (click)="refresh.emit()">
+        <fa-icon icon="sync-alt"></fa-icon>
+      </button>
+    </div>
+    <div class="float-right mr-3" *ngIf="!!worker.hashrate && !!worker.hashrate[0]">
+      <ng-template ngFor let-t [ngForOf]="['10s', '1m', '15m']" let-i="index">
+        <small class="text-muted s">{{ t }}</small>
+        <hashrate [value]="worker.hashrate[i]" class="s"></hashrate>
+      </ng-template>
+    </div>
+  </h5>
+  <div class="card-body d-flex flex-wrap">
+    <div class="mr-4">
+      <span class="text-muted">profile</span><br>
+      <span class="badge badge-primary s">{{ worker.profile }}</span>
+      <span class="badge badge-dark">{{ worker.algo }}</span>
+    </div>
+
+    <div class="mr-4">
+      <span class="text-muted">runtime</span><br>
+      <span>{{worker.versions['cuda-runtime']}}</span>
+    </div>
+    <div class="mr-4">
+      <span class="text-muted">cuda</span><br>
+      <span>{{worker.versions['cuda-driver']}}</span>
+    </div>
+    <div class="mr-4">
+      <span class="text-muted">plugin</span><br>
+      <span>{{worker.versions['plugin']}}</span>
+    </div>
+    <div class="mr-4">
+      <span class="text-muted">nvml</span><br>
+      <span>{{worker.versions['nvml']}}</span>
+    </div>
+    <div class="mr-4">
+      <span class="text-muted">driver</span><br>
+      <span>{{worker.versions['driver']}}</span>
+    </div>
+
+    <!-- <div class="mr-4">
+      <span class="text-muted">memory</span><br>
+      <b class="text-info">{{ g.formatBytes(worker.memory, 0) }}</b>
+    </div>
+    <div class="mr-4">
+      <span class="text-muted">aes</span><br>
+      <span [class.text-success]="worker['hw-aes']" [class.text-danger]="!worker['hw-aes']">
+        <fa-icon [icon]="worker['hw-aes'] ? 'check-circle': 'times-circle'"></fa-icon>
+      </span>
+    </div>
+    <div class="mr-4">
+      <span class="text-muted">asm</span><br>
+      <b class="text-success" *ngIf="!!worker.asm">{{ worker.asm }}</b>
+      <b class="text-danger" *ngIf="!!!worker.asm">
+        <fa-icon icon="times-circle"></fa-icon>
+      </b>
+    </div>
+    <div class="mr-4">
+      <span class="text-muted">priority</span><br>
+      {{ g.priority(worker.priority) }}
+    </div> -->
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover table-sm table-striped mb-0">
+      <thead>
+        <tr>
+          <th class="border-bottom-0 pl-4">#
+            <span class="badge badge-dark">{{ worker.threads?.length}}</span>
+          </th>
+          <th class="border-bottom-0 font-weight-normal">name</th>
+          <th class="border-bottom-0 font-weight-normal">smx</th>
+          <th class="border-bottom-0 font-weight-normal">arch</th>
+          <th class="border-bottom-0 font-weight-normal">affinity</th>
+          <th class="border-bottom-0 font-weight-normal">temp</th>
+          <th class="border-bottom-0 font-weight-normal">fan</th>
+          <th class="border-bottom-0 font-weight-normal">power</th>
+          <th class="border-bottom-0 font-weight-normal">10s</th>
+          <th class="border-bottom-0 font-weight-normal">1m</th>
+          <th class="border-bottom-0 font-weight-normal">15m</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let th of worker.threads; let i = index">
+          <td class="pl-4">
+            <h6 class="mb-0">GPU {{th.index}}</h6>
+            <div>{{th.bus_id}}</div>
+          </td>
+          <td>
+            <div>
+              <h6 class="mb-0 d-inline-block mr-2">{{th.name}}</h6>
+              <span class="h6 d-inline-block font-weight-normal mb-0">{{th.global_mem | formatBytes:0}}</span>
+            </div>
+            <div>
+              <span class="mr-2">{{th.clock}}/{{th.memory_clock}} MHz</span>
+              <span class="mr-2">(Health: {{th.health.clock}}/{{th.health.mem_clock}} MHz)</span>
+            </div>
+          </td>
+
+          <td>{{ th.smx }}</td>
+          <td>{{ th.arch }}</td>
+          <td>{{ th.affinity }}</td>
+          <td>{{ th.health.temperature }}°</td>
+          <td>{{ th.health.fan_speed[0] }}%</td>
+          <td>{{ th.health.power }}W</td>
+          <td>
+            <hashrate [value]="th?.hashrate[0]"></hashrate>
+          </td>
+          <td>
+            <hashrate [value]="th?.hashrate[1]"></hashrate>
+          </td>
+          <td>
+            <hashrate [value]="th?.hashrate[2]"></hashrate>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
