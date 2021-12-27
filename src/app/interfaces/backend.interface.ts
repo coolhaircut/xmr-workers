@@ -31,6 +31,15 @@ export interface IBackendThread {
 
 
 
+
+export interface IBackendOpenCL extends IBackend {
+  todo: number;
+}
+
+
+
+
+
 export interface IBackendCuda extends IBackend {
   versions: IBackendCudaVersions;
   threads: IBackendCudaThread[];

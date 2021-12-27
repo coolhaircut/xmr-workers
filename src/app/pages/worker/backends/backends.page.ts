@@ -1,12 +1,10 @@
-import { IBackendCPU } from 'src/app/interfaces/backend.interface';
+import { IBackendCPU, IBackendOpenCL, IBackendCuda } from 'src/app/interfaces/backend.interface';
 import { Component, OnDestroy, OnInit, } from '@angular/core';
 import { RuntimeService } from 'src/app/engine/runtime.service';
 import { Events } from 'src/app/engine/events.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from 'src/app/engine/global.service';
 import { IWorker } from 'src/app/interfaces/worker.interface';
-import { ISummary } from 'src/app/interfaces/summary.interface';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-worker-backends',
@@ -20,13 +18,13 @@ export class WorkerBackendsPage implements OnInit, OnDestroy {
   cid: any;
 
   get cpu(): IBackendCPU | null {
-    return this.worker.backends.filter(o => o.type === 'cpu')[0];
+    return this.worker.backends.filter(o => o.type === 'cpu')[0] as IBackendCPU;
   }
-  get opencl(): IBackendCPU | null {
-    return this.worker.backends.filter(o => o.type === 'opencl')[0];
+  get opencl(): IBackendOpenCL | null {
+    return this.worker.backends.filter(o => o.type === 'opencl')[0] as IBackendOpenCL;
   }
-  get cuda(): IBackendCPU | null {
-    return this.worker.backends.filter(o => o.type === 'cuda')[0];
+  get cuda(): IBackendCuda | null {
+    return this.worker.backends.filter(o => o.type === 'cuda')[0] as IBackendCuda;
   }
 
   constructor(
