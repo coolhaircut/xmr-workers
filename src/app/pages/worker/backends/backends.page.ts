@@ -1,11 +1,10 @@
+import { IBackendCPU, IBackendOpenCL, IBackendCuda } from 'src/app/interfaces/backend.interface';
 import { Component, OnDestroy, OnInit, } from '@angular/core';
 import { RuntimeService } from 'src/app/engine/runtime.service';
 import { Events } from 'src/app/engine/events.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from 'src/app/engine/global.service';
 import { IWorker } from 'src/app/interfaces/worker.interface';
-import { ISummary } from 'src/app/interfaces/summary.interface';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-worker-backends',
@@ -18,6 +17,16 @@ export class WorkerBackendsPage implements OnInit, OnDestroy {
   loaded = false;
   cid: any;
 
+  get cpu(): IBackendCPU | null {
+    return this.worker.backends.filter(o => o.type === 'cpu')[0] as IBackendCPU;
+  }
+  get opencl(): IBackendOpenCL | null {
+    return this.worker.backends.filter(o => o.type === 'opencl')[0] as IBackendOpenCL;
+  }
+  get cuda(): IBackendCuda | null {
+    return this.worker.backends.filter(o => o.type === 'cuda')[0] as IBackendCuda;
+  }
+
   constructor(
     public runtime: RuntimeService,
     public events: Events,
@@ -29,28 +38,20 @@ export class WorkerBackendsPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.worker = this.runtime.viewing;
 
-    this.job();
+    this.refresh();
   }
 
   ngOnDestroy() {
     clearTimeout(this.cid);
   }
 
-  job() {
+  refresh() {
     clearTimeout(this.cid);
-    this.runtime.getBackends(this.worker).then(() => {
-      this.loaded = true;
-    }).finally(() => this.cid = setTimeout(this.job.bind(this), this.runtime.refresh.value * 1000));
+    this.runtime.getBackends(this.worker)
+      .then(() => {
+        this.loaded = true;
+      })
+      .finally(() => this.cid = setTimeout(this.refresh.bind(this), this.runtime.refresh.value * 1000));
   }
 
-  priority(p: number) {
-    switch (p) {
-      case -1: return 'default';
-      case 1: return 'below normal';
-      case 2: return 'normal';
-      case 3: return 'above normal';
-      case 4: return 'high';
-      case 5: return 'realtime';
-    }
-  }
 }

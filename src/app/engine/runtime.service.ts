@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
-import { IBackend } from '../interfaces/backend.interface';
+import { IBackendCPU } from '../interfaces/backend.interface';
 import { ISavedWorker } from '../interfaces/saved-worker.interface';
 import { ISummary } from '../interfaces/summary.interface';
 import { IWorker, WorkerStatus } from '../interfaces/worker.interface';
@@ -100,8 +100,8 @@ export class RuntimeService {
 
   getBackends(worker: IWorker): Promise<void> {
     return new Promise((ok) => {
-      this.api.call(`${worker.url}/2/backends`, worker.token).then((backends: IBackend[]) => {
-        worker.backends = backends.filter(o => o.type === 'cpu');
+      this.api.call(`${worker.url}/2/backends`, worker.token).then((backends: IBackendCPU[]) => {
+        worker.backends = backends;
       }, (err) => {
         worker.backends = null;
       }).finally(() => {

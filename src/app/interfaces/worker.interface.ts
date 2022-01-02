@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { IBackend } from './backend.interface';
+import { IBackendCPU, IBackendOpenCL, IBackendCuda } from './backend.interface';
 import { ISavedWorker } from './saved-worker.interface';
 import { ISummary } from './summary.interface';
 
@@ -7,7 +7,7 @@ export interface IWorker extends ISavedWorker {
   last: number;
   status: WorkerStatus;
   summary?: ISummary;
-  backends?: IBackend[];
+  backends?: (IBackendCPU | IBackendOpenCL | IBackendCuda)[];
   actionsLoading?: boolean; // GUI only
 }
 
