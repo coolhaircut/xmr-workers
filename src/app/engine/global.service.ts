@@ -110,7 +110,7 @@ export class GlobalService {
     if (value <= 0){
       return '0 H/s';
     }
-    const oneK = 1024;
+    const oneK = 1000;
     const sizes = ['H', 'KH', 'MH', 'GH', 'TH', 'PH', 'EH', 'ZH', 'YH'];
     const idx = Math.floor(Math.log(value) / Math.log(oneK));
     return parseFloat((value / Math.pow(oneK, idx)).toFixed(decimals < 0 ? 0 : decimals)) + ' ' + sizes[idx];
